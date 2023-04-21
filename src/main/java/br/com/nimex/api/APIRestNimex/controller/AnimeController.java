@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import br.com.nimex.api.APIRestNimex.domain.anime.dto.AnimeListingDTO;
 import br.com.nimex.api.APIRestNimex.domain.anime.dto.AnimeRegisterAndUpdateDTO;
 import br.com.nimex.api.APIRestNimex.exception.NotFoundException;
 import br.com.nimex.api.APIRestNimex.repository.AnimeRepository;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -60,7 +62,8 @@ public class AnimeController {
 
     @PostMapping
     public ResponseEntity<Anime> postAnime(
-        @RequestBody AnimeRegisterAndUpdateDTO dto
+        @RequestBody @Valid AnimeRegisterAndUpdateDTO dto,
+        BindingResult result
         ) {
         log.info("[ Create ] - Cadastrando novo anime: " + dto.title() + ".");
         Anime anime = new Anime();
@@ -86,7 +89,8 @@ public class AnimeController {
     @PutMapping("/{id}")
     public ResponseEntity<Anime> updateAnime(
         @PathVariable Long id, 
-        @RequestBody AnimeRegisterAndUpdateDTO dto
+        @RequestBody @Valid AnimeRegisterAndUpdateDTO dto,
+        BindingResult result
         ) {
         log.info("[ Delete ] - Deletando um anime com o id: " + id + ".");
         getAnime(id);
