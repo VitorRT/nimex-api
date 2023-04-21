@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
-@Table(name = "TB_ANIME",uniqueConstraints= @UniqueConstraint(columnNames={"title"}))
+@Table(name="TB_ANIME", uniqueConstraints=@UniqueConstraint(columnNames={"title"}))
 
 public class Anime {
 
