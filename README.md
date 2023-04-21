@@ -1,2 +1,2 @@
-# nimex-api
-API Rest do melhor aplicativo de cadastro de animes. 
+# Nimex API Rest 🎴💻
+Documentação oficial da API Rest da **Nimex**! Essa API responde as boas práticas do modelo REST, contendo validações no cadastro e na edição dos domínios, respostas com status code apropriado.
