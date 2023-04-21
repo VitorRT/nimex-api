@@ -6,15 +6,17 @@ import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import br.com.nimex.api.APIRestNimex.exception.RestNotFoundException;
+import br.com.nimex.api.APIRestNimex.exception.dto.FullRestValidationError;
 import br.com.nimex.api.APIRestNimex.exception.dto.RestException;
 import br.com.nimex.api.APIRestNimex.exception.dto.RestMethodError;
-import br.com.nimex.api.APIRestNimex.exception.dto.RestNotFoundError;
+import br.com.nimex.api.APIRestNimex.exception.dto.RestShortException;
 import br.com.nimex.api.APIRestNimex.exception.dto.RestValidationError;
 import jakarta.validation.ConstraintViolationException;
 
@@ -22,7 +24,7 @@ import jakarta.validation.ConstraintViolationException;
 public class RestExceptionRender {
     
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<List<RestValidationError>> ConstraintViolationExceptionHandler(ConstraintViolationException e) {
+    public ResponseEntity<FullRestValidationError> ConstraintViolationExceptionHandler(ConstraintViolationException e) {
 
         List<RestValidationError> errors = new ArrayList<>();
 
@@ -30,14 +32,21 @@ public class RestExceptionRender {
             errors.add(new RestValidationError(v.getPropertyPath().toString(), v.getMessage()));
         });
 
-        return ResponseEntity.badRequest().body(errors);
+        FullRestValidationError error = new FullRestValidationError(HttpStatus.BAD_REQUEST.value(), errors);
+
+        return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<RestValidationError>> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+    public ResponseEntity<FullRestValidationError> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+
         List<RestValidationError> errors = new ArrayList<>();
+        
         e.getFieldErrors().forEach(v -> errors.add(new RestValidationError(v.getField(), v.getDefaultMessage())));
-        return ResponseEntity.badRequest().body(errors);
+
+        FullRestValidationError error = new FullRestValidationError(HttpStatus.BAD_REQUEST.value(), errors);
+
+        return ResponseEntity.badRequest().body(error);
     }
 
 
@@ -54,9 +63,15 @@ public class RestExceptionRender {
     }
 
     @ExceptionHandler(RestNotFoundException.class) 
-    public ResponseEntity<RestNotFoundError> RestNotFoundExceptionHandler(RestNotFoundException e) {
-        var error = new RestNotFoundError(e.getStatus(), e.getMessage());
+    public ResponseEntity<RestShortException> RestNotFoundExceptionHandler(RestNotFoundException e) {
+        var error = new RestShortException(e.getStatus(), e.getMessage());
         return ResponseEntity.status(e.getStatus()).body(error);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class) 
+    public ResponseEntity<RestShortException> HttpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
+        var error = new RestShortException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return ResponseEntity.badRequest().body(error);
     }
 
 }
