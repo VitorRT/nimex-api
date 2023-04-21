@@ -1,2 +1,2 @@
 # Nimex API Rest 🎴💻
-Documentação oficial da API Rest da **Nimex**! Essa API responde as boas práticas do modelo REST, contendo validações no cadastro e na edição dos domínios, respostas com status code apropriado. 
+Documentação oficial da API Rest da **Nimex**! Essa API responde as boas práticas do modelo REST, contendo validações no cadastro e na edição dos domínios, respostas com status code apropriado.
