@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -72,6 +73,12 @@ public class RestExceptionRender {
     public ResponseEntity<RestShortException> HttpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
         var error = new RestShortException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(InvalidDataAccessResourceUsageException.class)
+    public ResponseEntity<RestShortException> InvalidDataAccessResourceUsageExceptionHandler(InvalidDataAccessResourceUsageException e) {
+        var error = new RestShortException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Dados de acesso ao banco inválidos.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(error);
     }
 
 }
