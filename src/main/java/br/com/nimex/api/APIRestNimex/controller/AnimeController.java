@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.nimex.api.APIRestNimex.domain.anime.Anime;
 import br.com.nimex.api.APIRestNimex.domain.anime.dto.AnimeListingDTO;
 import br.com.nimex.api.APIRestNimex.domain.anime.dto.AnimeRegisterAndUpdateDTO;
-import br.com.nimex.api.APIRestNimex.exception.NotFoundException;
+import br.com.nimex.api.APIRestNimex.exception.RestNotFoundException;
 import br.com.nimex.api.APIRestNimex.repository.AnimeRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -62,8 +62,7 @@ public class AnimeController {
 
     @PostMapping
     public ResponseEntity<Anime> postAnime(
-        @RequestBody @Valid AnimeRegisterAndUpdateDTO dto,
-        BindingResult result
+        @RequestBody @Valid AnimeRegisterAndUpdateDTO dto
         ) {
         log.info("[ Create ] - Cadastrando novo anime: " + dto.title() + ".");
         Anime anime = new Anime();
@@ -89,8 +88,7 @@ public class AnimeController {
     @PutMapping("/{id}")
     public ResponseEntity<Anime> updateAnime(
         @PathVariable Long id, 
-        @RequestBody @Valid AnimeRegisterAndUpdateDTO dto,
-        BindingResult result
+        @RequestBody @Valid AnimeRegisterAndUpdateDTO dto
         ) {
         log.info("[ Delete ] - Deletando um anime com o id: " + id + ".");
         getAnime(id);
@@ -102,11 +100,11 @@ public class AnimeController {
     }
 
 
-
+ 
 
     private Anime getAnime(Long id) {
         return repository.findById(id).orElseThrow(() -> {
-            return new NotFoundException("Anime não encontrado.");
+            return new RestNotFoundException("Anime com o id [ " + id + " ] não encontrado.");
         });
     }
 }

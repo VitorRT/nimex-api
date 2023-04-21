@@ -1,16 +1,15 @@
 package br.com.nimex.api.APIRestNimex.domain.anime.dto;
 
 import br.com.nimex.api.APIRestNimex.domain.anime.AnimeStatus;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record AnimeRegisterAndUpdateDTO(
-    @NotBlank @Min(value = 4, message = "Titulo muito pequeno.") @Max(value = 180, message = "Titulo muito grande.")
+    @NotBlank @Size(min = 4, max = 180, message = "O Titulo deve ser significativo.")
     String title,
 
-    @NotBlank(message = "Sinopse não informada.") @Min(value = 8, message = "Sinopse muito pequena.")
+    @NotBlank(message = "Sinopse não informada.")  @Size(min = 8, message = "A sinopse deve ser significativa.")
     String synopsis,
 
     @NotNull(message = "Score não informada.")
