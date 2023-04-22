@@ -1,9 +1,12 @@
 package br.com.nimex.api.APIRestNimex.domain.anime;
 
+
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import br.com.nimex.api.APIRestNimex.domain.anime.dto.AnimeRegisterAndUpdateDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,6 +34,7 @@ public class Anime {
     private String title;
     
     @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String synopsis;
 
     private Double score;
@@ -41,6 +45,7 @@ public class Anime {
     private String genres;
 
     @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String image;
     
     @JsonProperty(access = Access.WRITE_ONLY)
