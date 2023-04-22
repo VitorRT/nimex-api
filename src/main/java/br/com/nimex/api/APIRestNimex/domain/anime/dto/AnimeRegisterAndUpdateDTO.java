@@ -1,5 +1,6 @@
 package br.com.nimex.api.APIRestNimex.domain.anime.dto;
 
+
 import br.com.nimex.api.APIRestNimex.domain.anime.AnimeStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
