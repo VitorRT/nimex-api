@@ -160,7 +160,7 @@ Exemplo de resposta 👇🏾
 
 --- 
 
-`PUT` /api/v1/anime
+`PUT` /api/v1/anime/{id}
 
 Exemplo de entrada 👇🏾
 ````js
