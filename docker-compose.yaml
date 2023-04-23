@@ -2,12 +2,12 @@ version: '3.1'
 
 services:
   db:
-    image: oscarfonts/h2:latest
+    image: oscarfonts/h2
     environment:
-      - TZ=UTC
       - H2_OPTIONS=-ifNotExists
     volumes:
       - db-data:/h2-data
+
     container_name: nimex-db
     networks:
       - nimex_network
@@ -24,9 +24,21 @@ services:
     ports:
       - 8080:8080
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:h2:mem:nimex
-      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_URL=jdbc:h2:tcp://db:1521/nimex
+      - SPRING_DATASOURCE_USERNAME=sa
       - SPRING_DATASOURCE_PASSWORD=
+    networks:
+      - nimex_network
+
+  h2-console:
+    image: oscarfonts/h2
+    ports:
+      - "81:81"
+    container_name: nimex-h2-console
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:h2:tcp://db:1521/nimex
+    depends_on:
+      - db
     networks:
       - nimex_network
 
